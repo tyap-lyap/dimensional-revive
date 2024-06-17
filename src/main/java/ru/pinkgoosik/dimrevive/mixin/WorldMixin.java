@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.pinkgoosik.dimrevive.VisitedDimensionsState;
+import ru.pinkgoosik.dimrevive.data.VisitedDimensionsState;
 import ru.pinkgoosik.dimrevive.extension.WorldExtension;
 
 import java.util.List;

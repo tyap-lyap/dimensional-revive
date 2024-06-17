@@ -4,6 +4,7 @@
   "package": "ru.pinkgoosik.dimrevive.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "PlayerMixin",
     "WorldMixin"
   ],
   "client": [
