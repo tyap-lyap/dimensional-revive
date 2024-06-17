@@ -27,8 +27,11 @@ public class DimensionalRevive implements ModInitializer {
 		ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
 			var visitedDimensions = ((WorldExtension)player.getServer().getOverworld()).getVisitedDimensions().visitedDimensions;
 
-			if(player.getServer().isHardcore() && !destination.getRegistryKey().equals(World.OVERWORLD) && !visitedDimensions.contains(destination.getRegistryKey().getValue().toString())) {
+			if(!player.isSpectator() && player.getServer().isHardcore() && !destination.getRegistryKey().equals(World.OVERWORLD) && !visitedDimensions.contains(destination.getRegistryKey().getValue().toString())) {
 
+				player.getServer().getPlayerManager().broadcast(Text.literal("New dimension was discovered: §6" + formatDimensionName(destination.getRegistryKey()) + "§f. All players are revived."), false);
+				visitedDimensions.add(destination.getRegistryKey().getValue().toString());
+				((WorldExtension)player.getServer().getOverworld()).getVisitedDimensions().setDirty(true);
 
 				player.getServer().getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
 					if(serverPlayerEntity.isSpectator()) {
@@ -38,13 +41,9 @@ public class DimensionalRevive implements ModInitializer {
 
 						serverPlayerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 5, 5, false, true));
 						serverPlayerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 5, 5, false, true));
-						serverPlayerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 5, 255, false, true));
+						serverPlayerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 5, 255, false, true));
 					}
-					serverPlayerEntity.sendMessage(Text.literal("New dimension was discovered: §6" + formatDimensionName(destination.getRegistryKey()) + "§f. All players are revived."));
 				});
-
-				visitedDimensions.add(destination.getRegistryKey().getValue().toString());
-				((WorldExtension)player.getServer().getOverworld()).getVisitedDimensions().setDirty(true);
 			}
 		});
 	}
