@@ -35,11 +35,11 @@ public class VisitedDimensionsState extends PersistentState {
 
 
 	public boolean wasVisited(RegistryKey<World> key) {
-		this.setDirty(true);
 		return visitedDimensions.contains(key.getValue().toString());
 	}
 
 	public void addDimension(RegistryKey<World> key) {
+		this.setDirty(true);
 		this.visitedDimensions.add(key.getValue().toString());
 	}
 }
