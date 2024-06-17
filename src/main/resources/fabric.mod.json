@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "dimrevive",
+  "version": "${version}",
+  "name": "Dimensional Revive",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "PinkGoosik"
+  ],
+  "license": "MIT",
+  "icon": "assets/dimrevive/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ru.pinkgoosik.dimrevive.DimensionalRevive"
+    ]
+  },
+  "mixins": [
+    "dimrevive.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "fabric": "*",
+    "minecraft": ">=1.20",
+    "java": ">=17"
+  }
+}
