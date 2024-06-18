@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public class VisitedDimensionsState extends PersistentState {
-	public final ArrayList<String> visitedDimensions = new ArrayList<>();
+	final ArrayList<String> visitedDimensions = new ArrayList<>();
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
