@@ -17,6 +17,7 @@ import net.minecraft.nbt.NbtHelper;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
@@ -37,26 +38,28 @@ public class DimensionalRevive implements ModInitializer {
 
 		ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
 			if(entity instanceof ServerPlayerEntity player && player instanceof PlayerExtension ex && player.getServer().isHardcore() && player.interactionManager.getGameMode().equals(GameMode.SURVIVAL)) {
-				SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, player.getServerWorld());
-				skeleton.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch());
+				if(!player.getStackInHand(Hand.MAIN_HAND).isOf(Items.TOTEM_OF_UNDYING) && !player.getStackInHand(Hand.OFF_HAND).isOf(Items.TOTEM_OF_UNDYING)) {
+					SkeletonEntity skeleton = new SkeletonEntity(EntityType.SKELETON, player.getServerWorld());
+					skeleton.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch());
 
-				ItemStack head = new ItemStack(Items.PLAYER_HEAD);
-				GameProfile gameProfile = player.getGameProfile();
-				head.getOrCreateNbt().put("SkullOwner", NbtHelper.writeGameProfile(new NbtCompound(), gameProfile));
+					ItemStack head = new ItemStack(Items.PLAYER_HEAD);
+					GameProfile gameProfile = player.getGameProfile();
+					head.getOrCreateNbt().put("SkullOwner", NbtHelper.writeGameProfile(new NbtCompound(), gameProfile));
 
-				skeleton.equipStack(EquipmentSlot.HEAD, head);
+					skeleton.equipStack(EquipmentSlot.HEAD, head);
 
-				skeleton.equipStack(EquipmentSlot.CHEST, player.getEquippedStack(EquipmentSlot.CHEST).copy());
-				skeleton.equipStack(EquipmentSlot.LEGS, player.getEquippedStack(EquipmentSlot.LEGS).copy());
-				skeleton.equipStack(EquipmentSlot.FEET, player.getEquippedStack(EquipmentSlot.FEET).copy());
-				skeleton.equipStack(EquipmentSlot.MAINHAND, player.getMainHandStack().copy());
-				skeleton.equipStack(EquipmentSlot.OFFHAND, player.getOffHandStack().copy());
+					skeleton.equipStack(EquipmentSlot.CHEST, player.getEquippedStack(EquipmentSlot.CHEST).copy());
+					skeleton.equipStack(EquipmentSlot.LEGS, player.getEquippedStack(EquipmentSlot.LEGS).copy());
+					skeleton.equipStack(EquipmentSlot.FEET, player.getEquippedStack(EquipmentSlot.FEET).copy());
+					skeleton.equipStack(EquipmentSlot.MAINHAND, player.getMainHandStack().copy());
+					skeleton.equipStack(EquipmentSlot.OFFHAND, player.getOffHandStack().copy());
 
-				skeleton.setHealth(0);
-				player.getServerWorld().spawnEntity(skeleton);
+					skeleton.setHealth(0);
+					player.getServerWorld().spawnEntity(skeleton);
 
-				ex.onSilentDeath(damageSource);
-				return false;
+					ex.onSilentDeath(damageSource);
+					return false;
+				}
 			}
 			return true;
 		});
